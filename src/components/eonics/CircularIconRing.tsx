@@ -95,7 +95,7 @@ export function CircularIconRing({
         {`
           @keyframes eonics-glow-pulse { 0% { opacity: .45 } 100% { opacity: .85 } }
           @keyframes eonics-rotate { from { transform: translate(-50%, -50%) rotate(0deg) } to { transform: translate(-50%, -50%) rotate(360deg) } }
-          @keyframes eonics-center-pulse { 0% { transform: translate(-50%, -50%) scale(1); opacity: .86 } 50% { transform: translate(-50%, -50%) scale(1.10); opacity: 1 } 100% { transform: translate(-50%, -50%) scale(1); opacity: .86 } }
+          @keyframes eonics-center-pulse { 0% { transform: scale(1); opacity: .86 } 50% { transform: scale(1.10); opacity: 1 } 100% { transform: scale(1); opacity: .86 } }
         `}
       </style>
 
