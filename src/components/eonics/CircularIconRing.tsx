@@ -168,7 +168,7 @@ export function CircularIconRing({
 
                     setClickedId(it.id);
                     if (clickTimerRef.current) window.clearTimeout(clickTimerRef.current);
-                    clickTimerRef.current = window.setTimeout(() => setClickedId(""), 1000);
+                    clickTimerRef.current = window.setTimeout(() => setClickedId(""), 5000);
 
                     handleNavigate(it.href);
                   }}
