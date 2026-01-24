@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "@/hooks/use-toast";
 
 type NavItem = { id: string; label: string };
 
@@ -71,42 +73,86 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
             </DialogTrigger>
             <DialogContent className="max-w-md">
               <DialogHeader>
-                <DialogTitle className="text-primary">Login</DialogTitle>
+                <DialogTitle className="text-primary">Account</DialogTitle>
                 <DialogDescription>
                   UI-only demo (no backend). We can wire this to real auth later.
                 </DialogDescription>
               </DialogHeader>
 
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setOpen(false);
-                }}
-                className="grid gap-3"
-              >
-                <div className="grid gap-2">
-                  <label htmlFor="login-email" className="text-sm text-muted-foreground">
-                    Email / Username
-                  </label>
-                  <Input id="login-email" autoComplete="username" placeholder="you@college.edu" className="bg-background/40" />
-                </div>
-                <div className="grid gap-2">
-                  <label htmlFor="login-password" className="text-sm text-muted-foreground">
-                    Password
-                  </label>
-                  <Input
-                    id="login-password"
-                    type="password"
-                    autoComplete="current-password"
-                    placeholder="••••••••"
-                    className="bg-background/40"
-                  />
-                </div>
+              <Tabs defaultValue="login" className="mt-2">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="login">Login</TabsTrigger>
+                  <TabsTrigger value="signup">Sign up</TabsTrigger>
+                </TabsList>
 
-                <Button type="submit" variant="gold" className="mt-2">
-                  Login
-                </Button>
-              </form>
+                <TabsContent value="login" className="mt-4">
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      toast({ title: "Demo only", description: "Login isn’t connected to a backend yet." });
+                      setOpen(false);
+                    }}
+                    className="grid gap-3"
+                  >
+                    <div className="grid gap-2">
+                      <label htmlFor="login-email" className="text-sm text-muted-foreground">
+                        Email / Username
+                      </label>
+                      <Input id="login-email" autoComplete="username" placeholder="you@college.edu" className="bg-background/40" />
+                    </div>
+                    <div className="grid gap-2">
+                      <label htmlFor="login-password" className="text-sm text-muted-foreground">
+                        Password
+                      </label>
+                      <Input
+                        id="login-password"
+                        type="password"
+                        autoComplete="current-password"
+                        placeholder="••••••••"
+                        className="bg-background/40"
+                      />
+                    </div>
+
+                    <Button type="submit" variant="gold" className="mt-2">
+                      Login
+                    </Button>
+                  </form>
+                </TabsContent>
+
+                <TabsContent value="signup" className="mt-4">
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      toast({ title: "Demo only", description: "Sign up isn’t connected to a backend yet." });
+                      setOpen(false);
+                    }}
+                    className="grid gap-3"
+                  >
+                    <div className="grid gap-2">
+                      <label htmlFor="signup-name" className="text-sm text-muted-foreground">
+                        Full name
+                      </label>
+                      <Input id="signup-name" autoComplete="name" placeholder="Your name" className="bg-background/40" />
+                    </div>
+                    <div className="grid gap-2">
+                      <label htmlFor="signup-email" className="text-sm text-muted-foreground">
+                        Email
+                      </label>
+                      <Input id="signup-email" autoComplete="email" placeholder="you@college.edu" className="bg-background/40" />
+                    </div>
+                    <div className="grid gap-2">
+                      <label htmlFor="signup-password" className="text-sm text-muted-foreground">
+                        Password
+                      </label>
+                      <Input id="signup-password" type="password" autoComplete="new-password" placeholder="••••••••" className="bg-background/40" />
+                    </div>
+
+                    <Button type="submit" variant="gold" className="mt-2">
+                      Create account
+                    </Button>
+                  </form>
+                </TabsContent>
+              </Tabs>
             </DialogContent>
           </Dialog>
         </div>
@@ -147,42 +193,107 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                     </DialogTrigger>
                     <DialogContent className="max-w-md">
                       <DialogHeader>
-                        <DialogTitle className="text-primary">Login</DialogTitle>
+                        <DialogTitle className="text-primary">Account</DialogTitle>
                         <DialogDescription>
                           UI-only demo (no backend). We can wire this to real auth later.
                         </DialogDescription>
                       </DialogHeader>
 
-                      <form
-                        onSubmit={(e) => {
-                          e.preventDefault();
-                          setOpen(false);
-                        }}
-                        className="grid gap-3"
-                      >
-                        <div className="grid gap-2">
-                          <label htmlFor="login-email-mobile" className="text-sm text-muted-foreground">
-                            Email / Username
-                          </label>
-                          <Input id="login-email-mobile" autoComplete="username" placeholder="you@college.edu" className="bg-background/40" />
-                        </div>
-                        <div className="grid gap-2">
-                          <label htmlFor="login-password-mobile" className="text-sm text-muted-foreground">
-                            Password
-                          </label>
-                          <Input
-                            id="login-password-mobile"
-                            type="password"
-                            autoComplete="current-password"
-                            placeholder="••••••••"
-                            className="bg-background/40"
-                          />
-                        </div>
+                      <Tabs defaultValue="login" className="mt-2">
+                        <TabsList className="grid w-full grid-cols-2">
+                          <TabsTrigger value="login">Login</TabsTrigger>
+                          <TabsTrigger value="signup">Sign up</TabsTrigger>
+                        </TabsList>
 
-                        <Button type="submit" variant="gold" className="mt-2">
-                          Login
-                        </Button>
-                      </form>
+                        <TabsContent value="login" className="mt-4">
+                          <form
+                            onSubmit={(e) => {
+                              e.preventDefault();
+                              toast({ title: "Demo only", description: "Login isn’t connected to a backend yet." });
+                              setOpen(false);
+                            }}
+                            className="grid gap-3"
+                          >
+                            <div className="grid gap-2">
+                              <label htmlFor="login-email-mobile" className="text-sm text-muted-foreground">
+                                Email / Username
+                              </label>
+                              <Input
+                                id="login-email-mobile"
+                                autoComplete="username"
+                                placeholder="you@college.edu"
+                                className="bg-background/40"
+                              />
+                            </div>
+                            <div className="grid gap-2">
+                              <label htmlFor="login-password-mobile" className="text-sm text-muted-foreground">
+                                Password
+                              </label>
+                              <Input
+                                id="login-password-mobile"
+                                type="password"
+                                autoComplete="current-password"
+                                placeholder="••••••••"
+                                className="bg-background/40"
+                              />
+                            </div>
+
+                            <Button type="submit" variant="gold" className="mt-2">
+                              Login
+                            </Button>
+                          </form>
+                        </TabsContent>
+
+                        <TabsContent value="signup" className="mt-4">
+                          <form
+                            onSubmit={(e) => {
+                              e.preventDefault();
+                              toast({ title: "Demo only", description: "Sign up isn’t connected to a backend yet." });
+                              setOpen(false);
+                            }}
+                            className="grid gap-3"
+                          >
+                            <div className="grid gap-2">
+                              <label htmlFor="signup-name-mobile" className="text-sm text-muted-foreground">
+                                Full name
+                              </label>
+                              <Input
+                                id="signup-name-mobile"
+                                autoComplete="name"
+                                placeholder="Your name"
+                                className="bg-background/40"
+                              />
+                            </div>
+                            <div className="grid gap-2">
+                              <label htmlFor="signup-email-mobile" className="text-sm text-muted-foreground">
+                                Email
+                              </label>
+                              <Input
+                                id="signup-email-mobile"
+                                autoComplete="email"
+                                placeholder="you@college.edu"
+                                className="bg-background/40"
+                              />
+                            </div>
+                            <div className="grid gap-2">
+                              <label htmlFor="signup-password-mobile" className="text-sm text-muted-foreground">
+                                Password
+                              </label>
+                              <Input
+                                id="signup-password-mobile"
+                                type="password"
+                                autoComplete="new-password"
+                                placeholder="••••••••"
+                                className="bg-background/40"
+                              />
+                            </div>
+
+                            <Button type="submit" variant="gold" className="mt-2">
+                              Create account
+                            </Button>
+                          </form>
+                        </TabsContent>
+                      </Tabs>
                     </DialogContent>
                   </Dialog>
                 </div>
