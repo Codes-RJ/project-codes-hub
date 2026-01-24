@@ -137,7 +137,6 @@ export function CircularIconRing({
               transform: "translate(-50%, -50%)",
               animation: `eonics-rotate ${duration}s linear infinite${reverse ? " reverse" : ""}`,
             }}
-            aria-hidden="true"
           >
             {/* Clickable icons */}
             {ring.map((it, i) => {
@@ -155,7 +154,7 @@ export function CircularIconRing({
                     handleNavigate(it.href);
                   }}
                   className={
-                    "absolute left-1/2 top-1/2 grid h-9 w-9 place-items-center rounded-full border border-border/60 bg-card/40 text-foreground/90 backdrop-blur-xl transition will-change-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                    "absolute left-1/2 top-1/2 z-20 grid h-9 w-9 place-items-center rounded-full border border-border/60 bg-card/40 text-foreground/90 backdrop-blur-xl transition will-change-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                   }
                   style={{
                     transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(${radius}) rotate(${-angle}deg)`,
