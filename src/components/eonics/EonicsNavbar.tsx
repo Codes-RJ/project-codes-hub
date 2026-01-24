@@ -23,6 +23,12 @@ function scrollToId(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
+function getRequiredMissing(form: HTMLFormElement, fields: string[]) {
+  const data = new FormData(form);
+  const missing = fields.filter((name) => !String(data.get(name) ?? "").trim());
+  return missing;
+}
+
 export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
   const [open, setOpen] = React.useState(false);
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -89,6 +95,17 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                   <form
                     onSubmit={(e) => {
                       e.preventDefault();
+
+                      const missing = getRequiredMissing(e.currentTarget, ["email", "password"]);
+                      if (missing.length) {
+                        toast({
+                          title: "Fill all details",
+                          description: "Please enter your email/username and password.",
+                          variant: "destructive",
+                        });
+                        return;
+                      }
+
                       toast({ title: "Demo only", description: "Login isn’t connected to a backend yet." });
                       setOpen(false);
                     }}
@@ -98,7 +115,14 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                       <label htmlFor="login-email" className="text-sm text-muted-foreground">
                         Email / Username
                       </label>
-                      <Input id="login-email" autoComplete="username" placeholder="you@college.edu" className="bg-background/40" />
+                      <Input
+                        id="login-email"
+                        name="email"
+                        autoComplete="username"
+                        placeholder="you@college.edu"
+                        className="bg-background/40"
+                        required
+                      />
                     </div>
                     <div className="grid gap-2">
                       <label htmlFor="login-password" className="text-sm text-muted-foreground">
@@ -106,10 +130,12 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                       </label>
                       <Input
                         id="login-password"
+                        name="password"
                         type="password"
                         autoComplete="current-password"
                         placeholder="••••••••"
                         className="bg-background/40"
+                        required
                       />
                     </div>
 
@@ -123,6 +149,17 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                   <form
                     onSubmit={(e) => {
                       e.preventDefault();
+
+                      const missing = getRequiredMissing(e.currentTarget, ["name", "email", "password"]);
+                      if (missing.length) {
+                        toast({
+                          title: "Fill all details",
+                          description: "Please enter your full name, email, and password.",
+                          variant: "destructive",
+                        });
+                        return;
+                      }
+
                       toast({ title: "Demo only", description: "Sign up isn’t connected to a backend yet." });
                       setOpen(false);
                     }}
@@ -132,19 +169,41 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                       <label htmlFor="signup-name" className="text-sm text-muted-foreground">
                         Full name
                       </label>
-                      <Input id="signup-name" autoComplete="name" placeholder="Your name" className="bg-background/40" />
+                      <Input
+                        id="signup-name"
+                        name="name"
+                        autoComplete="name"
+                        placeholder="Your name"
+                        className="bg-background/40"
+                        required
+                      />
                     </div>
                     <div className="grid gap-2">
                       <label htmlFor="signup-email" className="text-sm text-muted-foreground">
                         Email
                       </label>
-                      <Input id="signup-email" autoComplete="email" placeholder="you@college.edu" className="bg-background/40" />
+                      <Input
+                        id="signup-email"
+                        name="email"
+                        autoComplete="email"
+                        placeholder="you@college.edu"
+                        className="bg-background/40"
+                        required
+                      />
                     </div>
                     <div className="grid gap-2">
                       <label htmlFor="signup-password" className="text-sm text-muted-foreground">
                         Password
                       </label>
-                      <Input id="signup-password" type="password" autoComplete="new-password" placeholder="••••••••" className="bg-background/40" />
+                      <Input
+                        id="signup-password"
+                        name="password"
+                        type="password"
+                        autoComplete="new-password"
+                        placeholder="••••••••"
+                        className="bg-background/40"
+                        required
+                      />
                     </div>
 
                     <Button type="submit" variant="gold" className="mt-2">
@@ -209,6 +268,17 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                           <form
                             onSubmit={(e) => {
                               e.preventDefault();
+
+                              const missing = getRequiredMissing(e.currentTarget, ["email", "password"]);
+                              if (missing.length) {
+                                toast({
+                                  title: "Fill all details",
+                                  description: "Please enter your email/username and password.",
+                                  variant: "destructive",
+                                });
+                                return;
+                              }
+
                               toast({ title: "Demo only", description: "Login isn’t connected to a backend yet." });
                               setOpen(false);
                             }}
@@ -220,9 +290,11 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                               </label>
                               <Input
                                 id="login-email-mobile"
+                                name="email"
                                 autoComplete="username"
                                 placeholder="you@college.edu"
                                 className="bg-background/40"
+                                required
                               />
                             </div>
                             <div className="grid gap-2">
@@ -231,10 +303,12 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                               </label>
                               <Input
                                 id="login-password-mobile"
+                                name="password"
                                 type="password"
                                 autoComplete="current-password"
                                 placeholder="••••••••"
                                 className="bg-background/40"
+                                required
                               />
                             </div>
 
@@ -248,6 +322,17 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                           <form
                             onSubmit={(e) => {
                               e.preventDefault();
+
+                              const missing = getRequiredMissing(e.currentTarget, ["name", "email", "password"]);
+                              if (missing.length) {
+                                toast({
+                                  title: "Fill all details",
+                                  description: "Please enter your full name, email, and password.",
+                                  variant: "destructive",
+                                });
+                                return;
+                              }
+
                               toast({ title: "Demo only", description: "Sign up isn’t connected to a backend yet." });
                               setOpen(false);
                             }}
@@ -259,9 +344,11 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                               </label>
                               <Input
                                 id="signup-name-mobile"
+                                name="name"
                                 autoComplete="name"
                                 placeholder="Your name"
                                 className="bg-background/40"
+                                required
                               />
                             </div>
                             <div className="grid gap-2">
@@ -270,9 +357,11 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                               </label>
                               <Input
                                 id="signup-email-mobile"
+                                name="email"
                                 autoComplete="email"
                                 placeholder="you@college.edu"
                                 className="bg-background/40"
+                                required
                               />
                             </div>
                             <div className="grid gap-2">
@@ -281,10 +370,12 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                               </label>
                               <Input
                                 id="signup-password-mobile"
+                                name="password"
                                 type="password"
                                 autoComplete="new-password"
                                 placeholder="••••••••"
                                 className="bg-background/40"
+                                required
                               />
                             </div>
 
