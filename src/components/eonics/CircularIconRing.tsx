@@ -96,6 +96,10 @@ export function CircularIconRing({
           @keyframes eonics-glow-pulse { 0% { opacity: .45 } 100% { opacity: .85 } }
           @keyframes eonics-rotate { from { transform: translate(-50%, -50%) rotate(0deg) } to { transform: translate(-50%, -50%) rotate(360deg) } }
           @keyframes eonics-center-pulse { 0% { transform: scale(1); opacity: .86 } 50% { transform: scale(1.10); opacity: 1 } 100% { transform: scale(1); opacity: .86 } }
+
+          /* Match the HTML demo behavior: rings don't capture pointer events; icons do. */
+          .eonics-ring { pointer-events: none; }
+          .eonics-ring button { pointer-events: auto; }
         `}
       </style>
 
@@ -123,7 +127,7 @@ export function CircularIconRing({
         return (
           <div
             key={ringIdx}
-            className="absolute left-1/2 top-1/2 rounded-full"
+            className="eonics-ring absolute left-1/2 top-1/2 rounded-full"
             style={{
               width: `${sizePct}%`,
               height: `${sizePct}%`,
@@ -136,6 +140,7 @@ export function CircularIconRing({
                     : "0 0 5px 0px hsl(var(--primary) / 0.12)",
               transform: "translate(-50%, -50%)",
               animation: `eonics-rotate ${duration}s linear infinite${reverse ? " reverse" : ""}`,
+              zIndex: ringIdx + 1,
             }}
           >
             {/* Clickable icons */}
@@ -154,7 +159,7 @@ export function CircularIconRing({
                     handleNavigate(it.href);
                   }}
                   className={
-                    "absolute left-1/2 top-1/2 z-20 grid h-9 w-9 place-items-center rounded-full border border-border/60 bg-card/40 text-foreground/90 backdrop-blur-xl transition will-change-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                    "absolute left-1/2 top-1/2 z-10 grid h-9 w-9 place-items-center rounded-full border border-border/60 bg-card/40 text-foreground/90 backdrop-blur-xl transition-shadow duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background hover:shadow-[0_0_24px_4px_hsl(var(--primary)_/_0.35),0_0_6px_hsl(var(--foreground)_/_0.35)]"
                   }
                   style={{
                     transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(${radius}) rotate(${-angle}deg)`,
