@@ -57,19 +57,27 @@ const Index = () => {
                   College Technical Club • IoT • Hardware • Integration
                 </p>
 
-                <h1 className="mt-5 text-balance text-5xl font-semibold tracking-tight text-primary md:text-6xl">EONICS</h1>
+                <h1 className="mt-5 text-balance text-5xl font-semibold tracking-tight text-primary md:text-6xl">
+                  EONICS
+                </h1>
                 <p className="mt-3 text-lg text-muted-foreground md:text-xl">The IoT and Hardware Club</p>
 
                 <p className="mt-6 max-w-2xl text-pretty text-base leading-relaxed text-foreground/90">
-                  EONICS is a student-driven technical club focused on IoT, hardware innovation, and software integration. We
-                  build, compete, learn, and innovate together.
+                  EONICS is a student-driven technical club focused on IoT, hardware innovation, and software
+                  integration. We build, compete, learn, and innovate together.
                 </p>
 
                 <div className="mt-8 flex flex-wrap items-center gap-3">
-                  <Button variant="gold" onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}>
+                  <Button
+                    variant="gold"
+                    onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}
+                  >
                     Explore Projects <ArrowUpRight />
                   </Button>
-                  <Button variant="goldOutline" onClick={() => document.getElementById("events")?.scrollIntoView({ behavior: "smooth" })}>
+                  <Button
+                    variant="goldOutline"
+                    onClick={() => document.getElementById("events")?.scrollIntoView({ behavior: "smooth" })}
+                  >
                     Latest Events <Calendar />
                   </Button>
                 </div>
@@ -98,7 +106,7 @@ const Index = () => {
                   <div className="absolute inset-10 rounded-full border border-primary/35 bg-card/10" />
                   <div className="absolute inset-0 rounded-full [mask-image:radial-gradient(circle_at_center,black,transparent_65%)]" />
                   <div className="absolute inset-0 rounded-full opacity-60 [background:conic-gradient(from_120deg,hsl(var(--primary)/0.0),hsl(var(--primary)/0.28),hsl(var(--primary)/0.0),hsl(var(--primary)/0.22),hsl(var(--primary)/0.0))]" />
-                  <div className="absolute inset-[15%] flex items-center justify-center rounded-3xl border border-border/60 bg-card/35 backdrop-blur-xl">
+                  <div className="absolute inset-[25%] flex items-center justify-center rounded-3xl border border-border/60 bg-card/35 backdrop-blur-xl">
                     <img
                       src={logo}
                       alt="EONICS club logo"
@@ -113,7 +121,11 @@ const Index = () => {
         </section>
 
         {/* EVENTS */}
-        <EonicsSection id="events" title="Events & News" subtitle="Announcements, meetups, workshops, and club updates.">
+        <EonicsSection
+          id="events"
+          title="Events & News"
+          subtitle="Announcements, meetups, workshops, and club updates."
+        >
           <div className="grid gap-4">
             {[
               {
@@ -220,7 +232,11 @@ const Index = () => {
         </EonicsSection>
 
         {/* COMPETITIONS */}
-        <EonicsSection id="competitions" title="Competitions" subtitle="Join the next challenge. Register externally, or view details.">
+        <EonicsSection
+          id="competitions"
+          title="Competitions"
+          subtitle="Join the next challenge. Register externally, or view details."
+        >
           <EonicsCompetitionGrid
             items={[
               {
@@ -234,7 +250,8 @@ const Index = () => {
                   registrationEnd: "20 Feb 2026",
                   competitionDate: "01 Mar 2026",
                   theme: "Connected Campus",
-                  rules: "Teams of 2–5. Demo + brief pitch deck. Must include at least one hardware sensor and a clear data flow.",
+                  rules:
+                    "Teams of 2–5. Demo + brief pitch deck. Must include at least one hardware sensor and a clear data flow.",
                   platform: "Unstop",
                 },
               },
@@ -273,7 +290,11 @@ const Index = () => {
         </EonicsSection>
 
         {/* TRAINING */}
-        <EonicsSection id="training" title="Training & Resources" subtitle="Clean, minimal cards—curated learning paths (placeholders you can replace anytime).">
+        <EonicsSection
+          id="training"
+          title="Training & Resources"
+          subtitle="Clean, minimal cards—curated learning paths (placeholders you can replace anytime)."
+        >
           <EonicsTrainingGrid
             items={[
               { title: "IoT Fundamentals", category: "IoT" },
@@ -306,7 +327,8 @@ const Index = () => {
                   }
                   toast({
                     title: "Message queued",
-                    description: "Backend isn’t connected yet—this is a UI demo. We can wire it to email/DB when you’re ready.",
+                    description:
+                      "Backend isn’t connected yet—this is a UI demo. We can wire it to email/DB when you’re ready.",
                   });
                   (e.currentTarget as HTMLFormElement).reset();
                 }}
