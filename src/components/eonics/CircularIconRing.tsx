@@ -176,13 +176,13 @@ export function CircularIconRing({
 
       {/* Center content */}
       <div
-        className="absolute inset-[25%] z-10 flex items-center justify-center rounded-3xl border border-border/60 bg-card/35 backdrop-blur-xl"
+        className="absolute inset-[30%] z-10 flex items-center justify-center rounded-3xl border border-border/60 bg-card/35 backdrop-blur-xl"
         style={{ animation: "eonics-center-pulse 3s cubic-bezier(.5, 0, .5, 1.2) infinite" }}
       >
         <img
           src={logoSrc}
           alt={logoAlt}
-          className="h-[80%] w-[80%] max-h-[80%] max-w-[80%] rounded-2xl object-contain"
+          className="h-[64%] w-[64%] max-h-[64%] max-w-[64%] rounded-2xl object-contain"
           loading="eager"
         />
       </div>
