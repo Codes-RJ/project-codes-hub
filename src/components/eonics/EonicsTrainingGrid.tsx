@@ -37,10 +37,10 @@ export function EonicsTrainingGrid({ items }: { items: TrainingItem[] }) {
             className="block w-full rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
             aria-label={`${item.title} (${item.category})`}
           >
-            <Card className="glass-panel flex w-full min-h-[84px] sm:min-h-[92px] lg:min-h-[112px] items-start justify-between gap-3 p-5 text-left transition hover:bg-card/55">
+            <Card className="glass-panel flex w-full h-[84px] sm:h-[92px] lg:h-[112px] items-start justify-between gap-3 overflow-hidden p-5 text-left transition hover:bg-card/55">
               <div className="min-w-0">
                 <div>
-                  <p className="text-sm font-semibold text-foreground/95">{item.title}</p>
+                  <p className="text-sm font-semibold text-foreground/95 truncate">{item.title}</p>
                   <p className="mt-1 text-xs text-muted-foreground">{item.category}</p>
                 </div>
               </div>
