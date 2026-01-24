@@ -42,6 +42,8 @@ export function CircularIconRing({
 }) {
   const containerRef = React.useRef<HTMLDivElement | null>(null);
   const [containerSize, setContainerSize] = React.useState(320);
+  const [clickedId, setClickedId] = React.useState<string>("");
+  const clickTimerRef = React.useRef<number | null>(null);
 
   React.useEffect(() => {
     const el = containerRef.current;
@@ -57,6 +59,12 @@ export function CircularIconRing({
     const ro = new ResizeObserver(update);
     ro.observe(el);
     return () => ro.disconnect();
+  }, []);
+
+  React.useEffect(() => {
+    return () => {
+      if (clickTimerRef.current) window.clearTimeout(clickTimerRef.current);
+    };
   }, []);
 
   const data: RingItem[] =
@@ -96,6 +104,7 @@ export function CircularIconRing({
           @keyframes eonics-glow-pulse { 0% { opacity: .45 } 100% { opacity: .85 } }
           @keyframes eonics-rotate { from { transform: translate(-50%, -50%) rotate(0deg) } to { transform: translate(-50%, -50%) rotate(360deg) } }
           @keyframes eonics-center-pulse { 0% { transform: scale(1); opacity: .86 } 50% { transform: scale(1.10); opacity: 1 } 100% { transform: scale(1); opacity: .86 } }
+          @keyframes eonics-icon-click { 0% { transform: scale(1) } 12% { transform: scale(1.04) } 100% { transform: scale(1) } }
 
           /* Match the HTML demo behavior: rings don't capture pointer events; icons do. */
           .eonics-ring { pointer-events: none; }
@@ -156,6 +165,11 @@ export function CircularIconRing({
                   onClick={(e) => {
                     e.preventDefault();
                     setActiveId(it.id);
+
+                    setClickedId(it.id);
+                    if (clickTimerRef.current) window.clearTimeout(clickTimerRef.current);
+                    clickTimerRef.current = window.setTimeout(() => setClickedId(""), 1000);
+
                     handleNavigate(it.href);
                   }}
                   className={
@@ -170,7 +184,12 @@ export function CircularIconRing({
                   aria-label={it.label}
                   title={it.label}
                 >
-                  <it.Icon className={isActive ? "h-4 w-4 text-primary" : "h-4 w-4 text-muted-foreground"} />
+                  <span
+                    className="grid h-full w-full place-items-center"
+                    style={{ animation: clickedId === it.id ? "eonics-icon-click 1s ease-out" : undefined }}
+                  >
+                    <it.Icon className={isActive ? "h-4 w-4 text-primary" : "h-4 w-4 text-primary/80"} />
+                  </span>
                 </button>
               );
             })}
