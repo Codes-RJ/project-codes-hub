@@ -18,7 +18,6 @@ import { EonicsCompetitionGrid } from "@/components/eonics/EonicsCompetitionGrid
 import { EonicsTrainingGrid } from "@/components/eonics/EonicsTrainingGrid";
 import { EonicsFooter } from "@/components/eonics/EonicsFooter";
 import { BackToTopFab } from "@/components/eonics/BackToTopFab";
-import { CircularIconRing } from "@/components/eonics/CircularIconRing";
 
 const Index = () => {
   const heroRef = React.useRef<HTMLDivElement | null>(null);
@@ -101,7 +100,21 @@ const Index = () => {
 
               {/* Signature Orb */}
               <div className="min-w-0 md:col-span-5">
-                <CircularIconRing logoSrc={logo} />
+                <div className="relative mx-auto aspect-square w-full max-w-sm min-w-0">
+                  <div className="absolute inset-0 rounded-full bg-card/20 blur-2xl" />
+                  <div className="absolute inset-6 rounded-full border border-border/70 bg-card/30 backdrop-blur-xl" />
+                  <div className="absolute inset-10 rounded-full border border-primary/35 bg-card/10" />
+                  <div className="absolute inset-0 rounded-full [mask-image:radial-gradient(circle_at_center,black,transparent_65%)]" />
+                  <div className="absolute inset-0 rounded-full opacity-60 [background:conic-gradient(from_120deg,hsl(var(--primary)/0.0),hsl(var(--primary)/0.28),hsl(var(--primary)/0.0),hsl(var(--primary)/0.22),hsl(var(--primary)/0.0))]" />
+                  <div className="absolute inset-[35%] flex items-center justify-center rounded-3xl border border-border/60 bg-card/35 backdrop-blur-xl">
+                    <img
+                      src={logo}
+                      alt="EONICS club logo"
+                      className="h-[80%] w-[80%] max-h-[80%] max-w-[80%] rounded-2xl object-contain"
+                      loading="eager"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
