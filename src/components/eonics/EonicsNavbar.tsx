@@ -38,7 +38,7 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
   const signOut = React.useCallback(() => {
     setIsAuthed(false);
     setDisplayName("");
-    toast({ title: "Signed out", description: "Demo sign out (no backend)." });
+    toast({ title: "Signed out", description: "Demo sign out (no backend).", duration: 2000 });
   }, []);
 
   return (
@@ -124,6 +124,7 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                           title: "Fill all details",
                           description: "Please enter your email/username and password.",
                           variant: "destructive",
+                          duration: 2000,
                         });
                         return;
                       }
@@ -134,7 +135,7 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
 
                       setIsAuthed(true);
                       setDisplayName(email);
-                      toast({ title: "Signed in", description: "Demo sign in (no backend)." });
+                      toast({ title: "Signed in", description: "Demo sign in (no backend).", duration: 2000 });
                       setOpen(false);
                     }}
                     className="grid gap-3"
@@ -184,6 +185,7 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                           title: "Fill all details",
                           description: "Please enter your full name, email, and password.",
                           variant: "destructive",
+                          duration: 2000,
                         });
                         return;
                       }
@@ -194,7 +196,7 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
 
                       setIsAuthed(true);
                       setDisplayName(name);
-                      toast({ title: "Account created", description: "Demo sign up (no backend)." });
+                      toast({ title: "Account created", description: "Demo sign up (no backend).", duration: 2000 });
                       setOpen(false);
                     }}
                     className="grid gap-3"
@@ -328,6 +330,7 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                                   title: "Fill all details",
                                   description: "Please enter your email/username and password.",
                                   variant: "destructive",
+                                  duration: 2000,
                                 });
                                 return;
                               }
@@ -338,7 +341,7 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
 
                               setIsAuthed(true);
                               setDisplayName(email);
-                              toast({ title: "Signed in", description: "Demo sign in (no backend)." });
+                              toast({ title: "Signed in", description: "Demo sign in (no backend).", duration: 2000 });
                               setOpen(false);
                             }}
                             className="grid gap-3"
@@ -388,6 +391,7 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                                   title: "Fill all details",
                                   description: "Please enter your full name, email, and password.",
                                   variant: "destructive",
+                                  duration: 2000,
                                 });
                                 return;
                               }
@@ -398,7 +402,7 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
 
                               setIsAuthed(true);
                               setDisplayName(name);
-                              toast({ title: "Account created", description: "Demo sign up (no backend)." });
+                              toast({ title: "Account created", description: "Demo sign up (no backend).", duration: 2000 });
                               setOpen(false);
                             }}
                             className="grid gap-3"
