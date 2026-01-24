@@ -284,14 +284,14 @@ const Index = () => {
         >
           <EonicsTrainingGrid
             items={[
-              { title: "IoT Fundamentals", category: "IoT" },
-              { title: "Embedded C Crash Course", category: "Hardware" },
-              { title: "PCB Design Basics", category: "Hardware" },
-              { title: "Cloud Telemetry Pipeline", category: "Cloud" },
-              { title: "Data Analytics Starter", category: "Data Analytics" },
-              { title: "Full-Stack Dashboard", category: "Software" },
-              { title: "Sensors & Calibration", category: "IoT" },
-              { title: "Version Control for Teams", category: "Software" },
+              { title: "IoT Fundamentals", category: "IoT", href: "https://en.wikipedia.org/wiki/Internet_of_things" },
+              { title: "Embedded C Crash Course", category: "Hardware", href: "https://en.wikipedia.org/wiki/C_(programming_language)" },
+              { title: "PCB Design Basics", category: "Hardware", href: "https://en.wikipedia.org/wiki/Printed_circuit_board" },
+              { title: "Cloud Telemetry Pipeline", category: "Cloud", href: "https://en.wikipedia.org/wiki/Cloud_computing" },
+              { title: "Data Analytics Starter", category: "Data Analytics", href: "https://en.wikipedia.org/wiki/Data_analysis" },
+              { title: "Full-Stack Dashboard", category: "Software", href: "https://en.wikipedia.org/wiki/Web_application" },
+              { title: "Sensors & Calibration", category: "IoT", href: "https://en.wikipedia.org/wiki/Sensor" },
+              { title: "Version Control for Teams", category: "Software", href: "https://en.wikipedia.org/wiki/Version_control" },
             ]}
           />
         </EonicsSection>
