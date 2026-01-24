@@ -36,6 +36,25 @@ export function CircularIconRing({
   iconsPerRing?: number;
   onNavigate?: (href: string) => void;
 }) {
+  const containerRef = React.useRef<HTMLDivElement | null>(null);
+  const [containerSize, setContainerSize] = React.useState(320);
+
+  React.useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const update = () => {
+      const r = el.getBoundingClientRect();
+      const size = Math.min(r.width, r.height);
+      if (Number.isFinite(size) && size > 0) setContainerSize(size);
+    };
+
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   const data: RingItem[] =
     items ??
     [
@@ -67,7 +86,7 @@ export function CircularIconRing({
   );
 
   return (
-    <div className="relative mx-auto aspect-square w-full max-w-sm">
+    <div ref={containerRef} className="relative mx-auto aspect-square w-full max-w-sm">
       <style>
         {`
           @keyframes eonics-glow-pulse { 0% { opacity: .45 } 100% { opacity: .85 } }
@@ -95,6 +114,7 @@ export function CircularIconRing({
         const duration = ringIdx === 0 ? 36 : ringIdx === 1 ? 60 : 75;
         const reverse = ringIdx === 1;
         const iconRadiusPct = ringIdx === 0 ? 48 : ringIdx === 1 ? 33 : 18;
+        const radiusPx = Math.round((containerSize * iconRadiusPct) / 100);
 
         return (
           <div
@@ -118,7 +138,7 @@ export function CircularIconRing({
             {/* Clickable icons */}
             {ring.map((it, i) => {
               const angle = (360 / ring.length) * i;
-              const radius = `-${iconRadiusPct}%`;
+              const radius = `${-radiusPx}px`;
 
               const isActive = it.id === activeId;
               return (
@@ -134,7 +154,7 @@ export function CircularIconRing({
                     "absolute left-1/2 top-1/2 grid h-9 w-9 place-items-center rounded-full border border-border/60 bg-card/40 text-foreground/90 backdrop-blur-xl transition will-change-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                   }
                   style={{
-                    transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(${radius}) rotate(${-angle}deg)` ,
+                    transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(${radius}) rotate(${-angle}deg)`,
                     boxShadow: isActive
                       ? "0 0 0 1px hsl(var(--primary) / 0.25), 0 14px 40px -18px hsl(var(--primary) / 0.65)"
                       : "0 0 7px hsl(var(--primary) / 0.18)",
