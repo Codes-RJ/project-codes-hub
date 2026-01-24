@@ -31,10 +31,14 @@ export function CircularIconRing({
   items,
   iconsPerRing = 6,
   onNavigate,
+  logoSrc,
+  logoAlt = "EONICS club logo",
 }: {
   items?: RingItem[];
   iconsPerRing?: number;
   onNavigate?: (href: string) => void;
+  logoSrc: string;
+  logoAlt?: string;
 }) {
   const containerRef = React.useRef<HTMLDivElement | null>(null);
   const [containerSize, setContainerSize] = React.useState(320);
@@ -171,14 +175,16 @@ export function CircularIconRing({
       })}
 
       {/* Center content */}
-      <div className="absolute left-1/2 top-1/2 z-10" style={{ animation: "eonics-center-pulse 3s cubic-bezier(.5, 0, .5, 1.2) infinite" }}>
-        <div className="grid -translate-x-1/2 -translate-y-1/2 place-items-center text-center">
-          <div className="grid h-16 w-16 place-items-center rounded-2xl border border-border/60 bg-card/35 backdrop-blur-xl">
-            {active?.Icon ? <active.Icon className="h-7 w-7 text-primary" /> : null}
-          </div>
-          <p className="mt-3 text-xs font-medium tracking-wide text-foreground/90">{active?.label ?? ""}</p>
-          <p className="mt-1 text-[11px] text-muted-foreground">Tap an icon to open</p>
-        </div>
+      <div
+        className="absolute inset-[25%] z-10 flex items-center justify-center rounded-3xl border border-border/60 bg-card/35 backdrop-blur-xl"
+        style={{ animation: "eonics-center-pulse 3s cubic-bezier(.5, 0, .5, 1.2) infinite" }}
+      >
+        <img
+          src={logoSrc}
+          alt={logoAlt}
+          className="h-[80%] w-[80%] max-h-[80%] max-w-[80%] rounded-2xl object-contain"
+          loading="eager"
+        />
       </div>
     </div>
   );
