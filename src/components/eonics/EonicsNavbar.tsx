@@ -32,6 +32,14 @@ function getRequiredMissing(form: HTMLFormElement, fields: string[]) {
 export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
   const [open, setOpen] = React.useState(false);
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [isAuthed, setIsAuthed] = React.useState(false);
+  const [displayName, setDisplayName] = React.useState<string>("");
+
+  const signOut = React.useCallback(() => {
+    setIsAuthed(false);
+    setDisplayName("");
+    toast({ title: "Signed out", description: "Demo sign out (no backend)." });
+  }, []);
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
@@ -73,9 +81,23 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
         <div className="hidden lg:flex items-center gap-2 ml-auto">
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button variant="gold" size="default">
-                Login <LogIn />
-              </Button>
+              {isAuthed ? (
+                <Button
+                  type="button"
+                  variant="goldOutline"
+                  size="default"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    signOut();
+                  }}
+                >
+                  Sign out
+                </Button>
+              ) : (
+                <Button variant="gold" size="default">
+                  Login <LogIn />
+                </Button>
+              )}
             </DialogTrigger>
             <DialogContent className="max-w-md">
               <DialogHeader>
@@ -106,7 +128,13 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                         return;
                       }
 
-                      toast({ title: "Demo only", description: "Login isn’t connected to a backend yet." });
+                      const form = e.currentTarget;
+                      const data = new FormData(form);
+                      const email = String(data.get("email") ?? "").trim();
+
+                      setIsAuthed(true);
+                      setDisplayName(email);
+                      toast({ title: "Signed in", description: "Demo sign in (no backend)." });
                       setOpen(false);
                     }}
                     className="grid gap-3"
@@ -160,7 +188,13 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                         return;
                       }
 
-                      toast({ title: "Demo only", description: "Sign up isn’t connected to a backend yet." });
+                      const form = e.currentTarget;
+                      const data = new FormData(form);
+                      const name = String(data.get("name") ?? "").trim();
+
+                      setIsAuthed(true);
+                      setDisplayName(name);
+                      toast({ title: "Account created", description: "Demo sign up (no backend)." });
                       setOpen(false);
                     }}
                     className="grid gap-3"
@@ -212,6 +246,10 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                   </form>
                 </TabsContent>
               </Tabs>
+
+              {isAuthed && displayName ? (
+                <p className="mt-4 text-xs text-muted-foreground">Signed in as {displayName}</p>
+              ) : null}
             </DialogContent>
           </Dialog>
         </div>
@@ -246,9 +284,24 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                 <div className="mt-6 px-4">
                   <Dialog open={open} onOpenChange={setOpen}>
                     <DialogTrigger asChild>
-                      <Button variant="gold" className="w-full" onClick={() => setMobileOpen(false)}>
-                        Login <LogIn />
-                      </Button>
+                      {isAuthed ? (
+                        <Button
+                          type="button"
+                          variant="goldOutline"
+                          className="w-full"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setMobileOpen(false);
+                            signOut();
+                          }}
+                        >
+                          Sign out
+                        </Button>
+                      ) : (
+                        <Button variant="gold" className="w-full" onClick={() => setMobileOpen(false)}>
+                          Login <LogIn />
+                        </Button>
+                      )}
                     </DialogTrigger>
                     <DialogContent className="max-w-md">
                       <DialogHeader>
@@ -279,7 +332,13 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                                 return;
                               }
 
-                              toast({ title: "Demo only", description: "Login isn’t connected to a backend yet." });
+                              const form = e.currentTarget;
+                              const data = new FormData(form);
+                              const email = String(data.get("email") ?? "").trim();
+
+                              setIsAuthed(true);
+                              setDisplayName(email);
+                              toast({ title: "Signed in", description: "Demo sign in (no backend)." });
                               setOpen(false);
                             }}
                             className="grid gap-3"
@@ -333,7 +392,13 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                                 return;
                               }
 
-                              toast({ title: "Demo only", description: "Sign up isn’t connected to a backend yet." });
+                              const form = e.currentTarget;
+                              const data = new FormData(form);
+                              const name = String(data.get("name") ?? "").trim();
+
+                              setIsAuthed(true);
+                              setDisplayName(name);
+                              toast({ title: "Account created", description: "Demo sign up (no backend)." });
                               setOpen(false);
                             }}
                             className="grid gap-3"
@@ -385,6 +450,10 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                           </form>
                         </TabsContent>
                       </Tabs>
+
+                      {isAuthed && displayName ? (
+                        <p className="mt-4 text-xs text-muted-foreground">Signed in as {displayName}</p>
+                      ) : null}
                     </DialogContent>
                   </Dialog>
                 </div>
