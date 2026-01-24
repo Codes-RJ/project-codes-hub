@@ -101,7 +101,7 @@ const Index = () => {
 
               {/* Signature Orb */}
               <div className="min-w-0 md:col-span-5">
-                <CircularIconRing />
+                <CircularIconRing logoSrc={logo} />
               </div>
             </div>
           </div>
