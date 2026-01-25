@@ -331,7 +331,7 @@ const Index = () => {
                     required
                     rows={5}
                     placeholder="Write your query..."
-                    className="bg-background/40"
+                    className="bg-background/40 max-h-40 overflow-y-auto resize-none scroll-smooth [scrollbar-gutter:stable]"
                   />
                 </div>
                 <div className="flex flex-wrap items-center justify-between gap-3">
