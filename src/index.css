@@ -162,9 +162,29 @@ All colors MUST be HSL.
 
   /* Horizontal scroll area cosmetics */
   .projects-scroll {
-    scrollbar-width: none;
+    /* Show a themed scrollbar only when overflow exists (native behavior) */
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--primary) / 0.45) hsl(var(--muted) / 0.25);
+    scrollbar-gutter: stable;
+    scroll-behavior: smooth;
   }
+
   .projects-scroll::-webkit-scrollbar {
-    display: none;
+    height: 10px; /* horizontal scrollbar */
+  }
+
+  .projects-scroll::-webkit-scrollbar-track {
+    background: hsl(var(--muted) / 0.22);
+    border-radius: 999px;
+  }
+
+  .projects-scroll::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0.38);
+    border-radius: 999px;
+    border: 2px solid hsl(var(--muted) / 0.22);
+  }
+
+  .projects-scroll::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary) / 0.58);
   }
 }
