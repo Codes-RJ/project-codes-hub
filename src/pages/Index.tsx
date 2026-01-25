@@ -333,7 +333,26 @@ const Index = () => {
                 onSubmit={(e) => {
                   e.preventDefault();
                   const form = new FormData(e.currentTarget);
+                  const email = String(form.get("email") || "").trim();
                   const message = String(form.get("message") || "").trim();
+
+                  if (!email) {
+                    toast({
+                      title: "Email required",
+                      description: "Please provide your email address so we can contact you.",
+                    });
+                    return;
+                  }
+
+                  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                  if (!emailRegex.test(email)) {
+                    toast({
+                      title: "Invalid email",
+                      description: "Please enter a valid email address.",
+                    });
+                    return;
+                  }
+
                   if (message.length < 10) {
                     toast({
                       title: "Message too short",
@@ -344,12 +363,25 @@ const Index = () => {
                   toast({
                     title: "Message queued",
                     description:
-                      "Backend isn’t connected yet—this is a UI demo. We can wire it to email/DB when you’re ready.",
+                      "Backend isn't connected yet—this is a UI demo. We can wire it to email/DB when you're ready.",
                   });
                   (e.currentTarget as HTMLFormElement).reset();
                 }}
                 className="grid gap-4"
               >
+                <div className="grid gap-2">
+                  <label className="text-sm text-muted-foreground" htmlFor="email">
+                    Your email
+                  </label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    required
+                    placeholder="your.email@example.com"
+                    className="bg-background/40"
+                  />
+                </div>
                 <div className="grid gap-2">
                   <label className="text-sm text-muted-foreground" htmlFor="message">
                     Your message
