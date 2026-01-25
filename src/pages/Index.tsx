@@ -47,7 +47,7 @@ const Index = () => {
 
       <main>
         {/* HERO */}
-        <section id="home" ref={heroRef} className="relative overflow-hidden pt-24 md:pt-28" aria-label="EONICS hero">
+        <section id="home" ref={heroRef} className="relative overflow-hidden pt-24 pb-[15px] md:pt-28" aria-label="EONICS hero">
           <div className="pointer-events-none absolute inset-0 bg-hero" />
           <div className="pointer-events-none absolute inset-0 opacity-70 [background:radial-gradient(circle_at_20%_30%,hsl(var(--primary)/0.16),transparent_45%),radial-gradient(circle_at_80%_10%,hsl(var(--primary)/0.10),transparent_55%)]" />
           <div className="container relative">
