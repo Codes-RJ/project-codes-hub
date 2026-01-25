@@ -7,6 +7,16 @@ import { toast } from "@/hooks/use-toast";
 
 type Step = "email" | "otp" | "reset" | "done";
 
+const OTP_LENGTH = 6;
+const RESEND_COOLDOWN_SECONDS = 30;
+
+function formatSeconds(totalSeconds: number) {
+  const s = Math.max(0, Math.floor(totalSeconds));
+  const mm = String(Math.floor(s / 60)).padStart(2, "0");
+  const ss = String(s % 60).padStart(2, "0");
+  return `${mm}:${ss}`;
+}
+
 export function ForgotPasswordFlow({
   idPrefix,
   onBackToLogin,
@@ -22,6 +32,7 @@ export function ForgotPasswordFlow({
   const [sentMessage, setSentMessage] = React.useState<string>("");
   const [verifiedMessage, setVerifiedMessage] = React.useState<string>("");
   const [resetMessage, setResetMessage] = React.useState<string>("");
+  const [resendRemaining, setResendRemaining] = React.useState<number>(0);
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -34,7 +45,29 @@ export function ForgotPasswordFlow({
     setSentMessage("");
     setVerifiedMessage("");
     setResetMessage("");
+    setResendRemaining(0);
   }, []);
+
+  React.useEffect(() => {
+    if (step !== "otp") return;
+    if (resendRemaining <= 0) return;
+
+    const t = window.setInterval(() => {
+      setResendRemaining((s) => (s <= 1 ? 0 : s - 1));
+    }, 1000);
+
+    return () => window.clearInterval(t);
+  }, [resendRemaining, step]);
+
+  const startResendCooldown = React.useCallback(() => {
+    setResendRemaining(RESEND_COOLDOWN_SECONDS);
+  }, []);
+
+  const simulateOtpSend = React.useCallback(() => {
+    setSentMessage("An OTP has been sent to your registered email address.");
+    toast({ title: "OTP sent", description: "Demo only (no email service).", duration: 2000 });
+    startResendCooldown();
+  }, [startResendCooldown]);
 
   const onSendOtp = (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,8 +82,7 @@ export function ForgotPasswordFlow({
       return;
     }
 
-    setSentMessage("An OTP has been sent to your registered email address.");
-    toast({ title: "OTP sent", description: "Demo only (no email service).", duration: 2000 });
+    simulateOtpSend();
     setStep("otp");
   };
 
@@ -59,10 +91,10 @@ export function ForgotPasswordFlow({
     const safe = otp.replace(/\s/g, "");
 
     // Demo UX: treat any 6-digit OTP as valid.
-    if (!/^\d{6}$/.test(safe)) {
+    if (!new RegExp(`^\\d{${OTP_LENGTH}}$`).test(safe)) {
       toast({
         title: "Invalid OTP",
-        description: "Enter the 6-digit code from your email (demo: any 6 digits).",
+        description: `Enter the ${OTP_LENGTH}-digit code from your email (demo: any ${OTP_LENGTH} digits).`,
         variant: "destructive",
         duration: 2000,
       });
@@ -160,25 +192,45 @@ export function ForgotPasswordFlow({
             <div className="flex flex-wrap items-center gap-3">
               <InputOTP
                 id={`${idPrefix}-otp`}
-                maxLength={6}
+                maxLength={OTP_LENGTH}
                 value={otp}
                 onChange={(v) => setOtp(v)}
                 inputMode="numeric"
                 autoComplete="one-time-code"
               >
                 <InputOTPGroup>
-                  {Array.from({ length: 6 }).map((_, i) => (
+                  {Array.from({ length: OTP_LENGTH }).map((_, i) => (
                     <InputOTPSlot key={i} index={i} />
                   ))}
                 </InputOTPGroup>
               </InputOTP>
-              <p className="text-xs text-muted-foreground">Demo: enter any 6 digits</p>
+              <p className="text-xs text-muted-foreground">Demo: enter any {OTP_LENGTH} digits</p>
             </div>
           </div>
 
           <Button type="submit" variant="gold" className="mt-2">
             Verify OTP
           </Button>
+
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <Button
+              type="button"
+              variant="goldOutline"
+              disabled={resendRemaining > 0}
+              onClick={() => {
+                if (resendRemaining > 0) return;
+                simulateOtpSend();
+                toast({ title: "Resent OTP", description: "Demo resend (no email sent).", duration: 2000 });
+              }}
+            >
+              Resend OTP
+            </Button>
+            <p className="text-xs text-muted-foreground">
+              {resendRemaining > 0
+                ? `You can resend in ${formatSeconds(resendRemaining)}`
+                : "Didn't receive the code?"}
+            </p>
+          </div>
 
           {verifiedMessage ? <p className="text-sm text-muted-foreground">{verifiedMessage}</p> : null}
         </form>
