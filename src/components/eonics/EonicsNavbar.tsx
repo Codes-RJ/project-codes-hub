@@ -7,6 +7,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
+import { ForgotPasswordFlow } from "@/components/eonics/ForgotPasswordFlow";
 
 type NavItem = { id: string; label: string };
 
@@ -34,12 +35,21 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isAuthed, setIsAuthed] = React.useState(false);
   const [displayName, setDisplayName] = React.useState<string>("");
+  const [authView, setAuthView] = React.useState<"tabs" | "forgot">("tabs");
 
   const signOut = React.useCallback(() => {
     setIsAuthed(false);
     setDisplayName("");
     toast({ title: "Signed out", description: "Demo sign out (no backend).", duration: 2000 });
   }, []);
+
+  const onDialogOpenChange = React.useCallback(
+    (next: boolean) => {
+      setOpen(next);
+      if (!next) setAuthView("tabs");
+    },
+    [setOpen],
+  );
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
@@ -79,7 +89,7 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
 
         {/* Desktop Login Button */}
         <div className="hidden lg:flex items-center gap-2 ml-auto">
-          <Dialog open={open} onOpenChange={setOpen}>
+          <Dialog open={open} onOpenChange={onDialogOpenChange}>
             <DialogTrigger asChild>
               {isAuthed ? (
                 <Button
@@ -107,147 +117,161 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                 </DialogDescription>
               </DialogHeader>
 
-              <Tabs defaultValue="login" className="mt-2">
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="login">Login</TabsTrigger>
-                  <TabsTrigger value="signup">Sign up</TabsTrigger>
-                </TabsList>
+              {authView === "forgot" ? (
+                <ForgotPasswordFlow idPrefix="desktop" onBackToLogin={() => setAuthView("tabs")} />
+              ) : (
+                <Tabs defaultValue="login" className="mt-2">
+                  <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="login">Login</TabsTrigger>
+                    <TabsTrigger value="signup">Sign up</TabsTrigger>
+                  </TabsList>
 
-                <TabsContent value="login" className="mt-4">
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
+                  <TabsContent value="login" className="mt-4">
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
 
-                      const missing = getRequiredMissing(e.currentTarget, ["email", "password"]);
-                      if (missing.length) {
-                        toast({
-                          title: "Fill all details",
-                          description: "Please enter your email/username and password.",
-                          variant: "destructive",
-                          duration: 2000,
-                        });
-                        return;
-                      }
+                        const missing = getRequiredMissing(e.currentTarget, ["email", "password"]);
+                        if (missing.length) {
+                          toast({
+                            title: "Fill all details",
+                            description: "Please enter your email/username and password.",
+                            variant: "destructive",
+                            duration: 2000,
+                          });
+                          return;
+                        }
 
-                      const form = e.currentTarget;
-                      const data = new FormData(form);
-                      const email = String(data.get("email") ?? "").trim();
+                        const form = e.currentTarget;
+                        const data = new FormData(form);
+                        const email = String(data.get("email") ?? "").trim();
 
-                      setIsAuthed(true);
-                      setDisplayName(email);
-                      toast({ title: "Signed in", description: "Demo sign in (no backend).", duration: 2000 });
-                      setOpen(false);
-                    }}
-                    className="grid gap-3"
-                  >
-                    <div className="grid gap-2">
-                      <label htmlFor="login-email" className="text-sm text-muted-foreground">
-                        Email / Username
-                      </label>
-                      <Input
-                        id="login-email"
-                        name="email"
-                        autoComplete="username"
-                        placeholder="you@college.edu"
-                        className="bg-background/40"
-                        required
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <label htmlFor="login-password" className="text-sm text-muted-foreground">
-                        Password
-                      </label>
-                      <Input
-                        id="login-password"
-                        name="password"
-                        type="password"
-                        autoComplete="current-password"
-                        placeholder="••••••••"
-                        className="bg-background/40"
-                        required
-                      />
-                    </div>
+                        setIsAuthed(true);
+                        setDisplayName(email);
+                        toast({ title: "Signed in", description: "Demo sign in (no backend).", duration: 2000 });
+                        setOpen(false);
+                      }}
+                      className="grid gap-3"
+                    >
+                      <div className="grid gap-2">
+                        <label htmlFor="login-email" className="text-sm text-muted-foreground">
+                          Email / Username
+                        </label>
+                        <Input
+                          id="login-email"
+                          name="email"
+                          autoComplete="username"
+                          placeholder="you@college.edu"
+                          className="bg-background/40"
+                          required
+                        />
+                      </div>
+                      <div className="grid gap-2">
+                        <label htmlFor="login-password" className="text-sm text-muted-foreground">
+                          Password
+                        </label>
+                        <Input
+                          id="login-password"
+                          name="password"
+                          type="password"
+                          autoComplete="current-password"
+                          placeholder="••••••••"
+                          className="bg-background/40"
+                          required
+                        />
+                      </div>
 
-                    <Button type="submit" variant="gold" className="mt-2">
-                      Login
-                    </Button>
-                  </form>
-                </TabsContent>
+                      <div className="flex items-center justify-between gap-2">
+                        <Button type="submit" variant="gold" className="mt-2 flex-1">
+                          Login
+                        </Button>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="link"
+                        className="h-auto justify-start p-0 text-xs text-muted-foreground"
+                        onClick={() => setAuthView("forgot")}
+                      >
+                        Forgot Password?
+                      </Button>
+                    </form>
+                  </TabsContent>
 
-                <TabsContent value="signup" className="mt-4">
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
+                  <TabsContent value="signup" className="mt-4">
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
 
-                      const missing = getRequiredMissing(e.currentTarget, ["name", "email", "password"]);
-                      if (missing.length) {
-                        toast({
-                          title: "Fill all details",
-                          description: "Please enter your full name, email, and password.",
-                          variant: "destructive",
-                          duration: 2000,
-                        });
-                        return;
-                      }
+                        const missing = getRequiredMissing(e.currentTarget, ["name", "email", "password"]);
+                        if (missing.length) {
+                          toast({
+                            title: "Fill all details",
+                            description: "Please enter your full name, email, and password.",
+                            variant: "destructive",
+                            duration: 2000,
+                          });
+                          return;
+                        }
 
-                      const form = e.currentTarget;
-                      const data = new FormData(form);
-                      const name = String(data.get("name") ?? "").trim();
+                        const form = e.currentTarget;
+                        const data = new FormData(form);
+                        const name = String(data.get("name") ?? "").trim();
 
-                      setIsAuthed(true);
-                      setDisplayName(name);
-                      toast({ title: "Account created", description: "Demo sign up (no backend).", duration: 2000 });
-                      setOpen(false);
-                    }}
-                    className="grid gap-3"
-                  >
-                    <div className="grid gap-2">
-                      <label htmlFor="signup-name" className="text-sm text-muted-foreground">
-                        Full name
-                      </label>
-                      <Input
-                        id="signup-name"
-                        name="name"
-                        autoComplete="name"
-                        placeholder="Your name"
-                        className="bg-background/40"
-                        required
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <label htmlFor="signup-email" className="text-sm text-muted-foreground">
-                        Email
-                      </label>
-                      <Input
-                        id="signup-email"
-                        name="email"
-                        autoComplete="email"
-                        placeholder="you@college.edu"
-                        className="bg-background/40"
-                        required
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <label htmlFor="signup-password" className="text-sm text-muted-foreground">
-                        Password
-                      </label>
-                      <Input
-                        id="signup-password"
-                        name="password"
-                        type="password"
-                        autoComplete="new-password"
-                        placeholder="••••••••"
-                        className="bg-background/40"
-                        required
-                      />
-                    </div>
+                        setIsAuthed(true);
+                        setDisplayName(name);
+                        toast({ title: "Account created", description: "Demo sign up (no backend).", duration: 2000 });
+                        setOpen(false);
+                      }}
+                      className="grid gap-3"
+                    >
+                      <div className="grid gap-2">
+                        <label htmlFor="signup-name" className="text-sm text-muted-foreground">
+                          Full name
+                        </label>
+                        <Input
+                          id="signup-name"
+                          name="name"
+                          autoComplete="name"
+                          placeholder="Your name"
+                          className="bg-background/40"
+                          required
+                        />
+                      </div>
+                      <div className="grid gap-2">
+                        <label htmlFor="signup-email" className="text-sm text-muted-foreground">
+                          Email
+                        </label>
+                        <Input
+                          id="signup-email"
+                          name="email"
+                          autoComplete="email"
+                          placeholder="you@college.edu"
+                          className="bg-background/40"
+                          required
+                        />
+                      </div>
+                      <div className="grid gap-2">
+                        <label htmlFor="signup-password" className="text-sm text-muted-foreground">
+                          Password
+                        </label>
+                        <Input
+                          id="signup-password"
+                          name="password"
+                          type="password"
+                          autoComplete="new-password"
+                          placeholder="••••••••"
+                          className="bg-background/40"
+                          required
+                        />
+                      </div>
 
-                    <Button type="submit" variant="gold" className="mt-2">
-                      Create account
-                    </Button>
-                  </form>
-                </TabsContent>
-              </Tabs>
+                      <Button type="submit" variant="gold" className="mt-2">
+                        Create account
+                      </Button>
+                    </form>
+                  </TabsContent>
+                </Tabs>
+              )}
 
               {isAuthed && displayName ? (
                 <p className="mt-4 text-xs text-muted-foreground">Signed in as {displayName}</p>
@@ -284,7 +308,7 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                   </button>
                 ))}
                 <div className="mt-6 px-4">
-                  <Dialog open={open} onOpenChange={setOpen}>
+                  <Dialog open={open} onOpenChange={onDialogOpenChange}>
                     <DialogTrigger asChild>
                       {isAuthed ? (
                         <Button
@@ -313,147 +337,159 @@ export function EonicsNavbar({ logoSrc }: { logoSrc: string }) {
                         </DialogDescription>
                       </DialogHeader>
 
-                      <Tabs defaultValue="login" className="mt-2">
-                        <TabsList className="grid w-full grid-cols-2">
-                          <TabsTrigger value="login">Login</TabsTrigger>
-                          <TabsTrigger value="signup">Sign up</TabsTrigger>
-                        </TabsList>
+                      {authView === "forgot" ? (
+                        <ForgotPasswordFlow idPrefix="mobile" onBackToLogin={() => setAuthView("tabs")} />
+                      ) : (
+                        <Tabs defaultValue="login" className="mt-2">
+                          <TabsList className="grid w-full grid-cols-2">
+                            <TabsTrigger value="login">Login</TabsTrigger>
+                            <TabsTrigger value="signup">Sign up</TabsTrigger>
+                          </TabsList>
 
-                        <TabsContent value="login" className="mt-4">
-                          <form
-                            onSubmit={(e) => {
-                              e.preventDefault();
+                          <TabsContent value="login" className="mt-4">
+                            <form
+                              onSubmit={(e) => {
+                                e.preventDefault();
 
-                              const missing = getRequiredMissing(e.currentTarget, ["email", "password"]);
-                              if (missing.length) {
-                                toast({
-                                  title: "Fill all details",
-                                  description: "Please enter your email/username and password.",
-                                  variant: "destructive",
-                                  duration: 2000,
-                                });
-                                return;
-                              }
+                                const missing = getRequiredMissing(e.currentTarget, ["email", "password"]);
+                                if (missing.length) {
+                                  toast({
+                                    title: "Fill all details",
+                                    description: "Please enter your email/username and password.",
+                                    variant: "destructive",
+                                    duration: 2000,
+                                  });
+                                  return;
+                                }
 
-                              const form = e.currentTarget;
-                              const data = new FormData(form);
-                              const email = String(data.get("email") ?? "").trim();
+                                const form = e.currentTarget;
+                                const data = new FormData(form);
+                                const email = String(data.get("email") ?? "").trim();
 
-                              setIsAuthed(true);
-                              setDisplayName(email);
-                              toast({ title: "Signed in", description: "Demo sign in (no backend).", duration: 2000 });
-                              setOpen(false);
-                            }}
-                            className="grid gap-3"
-                          >
-                            <div className="grid gap-2">
-                              <label htmlFor="login-email-mobile" className="text-sm text-muted-foreground">
-                                Email / Username
-                              </label>
-                              <Input
-                                id="login-email-mobile"
-                                name="email"
-                                autoComplete="username"
-                                placeholder="you@college.edu"
-                                className="bg-background/40"
-                                required
-                              />
-                            </div>
-                            <div className="grid gap-2">
-                              <label htmlFor="login-password-mobile" className="text-sm text-muted-foreground">
-                                Password
-                              </label>
-                              <Input
-                                id="login-password-mobile"
-                                name="password"
-                                type="password"
-                                autoComplete="current-password"
-                                placeholder="••••••••"
-                                className="bg-background/40"
-                                required
-                              />
-                            </div>
+                                setIsAuthed(true);
+                                setDisplayName(email);
+                                toast({ title: "Signed in", description: "Demo sign in (no backend).", duration: 2000 });
+                                setOpen(false);
+                              }}
+                              className="grid gap-3"
+                            >
+                              <div className="grid gap-2">
+                                <label htmlFor="login-email-mobile" className="text-sm text-muted-foreground">
+                                  Email / Username
+                                </label>
+                                <Input
+                                  id="login-email-mobile"
+                                  name="email"
+                                  autoComplete="username"
+                                  placeholder="you@college.edu"
+                                  className="bg-background/40"
+                                  required
+                                />
+                              </div>
+                              <div className="grid gap-2">
+                                <label htmlFor="login-password-mobile" className="text-sm text-muted-foreground">
+                                  Password
+                                </label>
+                                <Input
+                                  id="login-password-mobile"
+                                  name="password"
+                                  type="password"
+                                  autoComplete="current-password"
+                                  placeholder="••••••••"
+                                  className="bg-background/40"
+                                  required
+                                />
+                              </div>
 
-                            <Button type="submit" variant="gold" className="mt-2">
-                              Login
-                            </Button>
-                          </form>
-                        </TabsContent>
+                              <Button type="submit" variant="gold" className="mt-2">
+                                Login
+                              </Button>
+                              <Button
+                                type="button"
+                                variant="link"
+                                className="h-auto justify-start p-0 text-xs text-muted-foreground"
+                                onClick={() => setAuthView("forgot")}
+                              >
+                                Forgot Password?
+                              </Button>
+                            </form>
+                          </TabsContent>
 
-                        <TabsContent value="signup" className="mt-4">
-                          <form
-                            onSubmit={(e) => {
-                              e.preventDefault();
+                          <TabsContent value="signup" className="mt-4">
+                            <form
+                              onSubmit={(e) => {
+                                e.preventDefault();
 
-                              const missing = getRequiredMissing(e.currentTarget, ["name", "email", "password"]);
-                              if (missing.length) {
-                                toast({
-                                  title: "Fill all details",
-                                  description: "Please enter your full name, email, and password.",
-                                  variant: "destructive",
-                                  duration: 2000,
-                                });
-                                return;
-                              }
+                                const missing = getRequiredMissing(e.currentTarget, ["name", "email", "password"]);
+                                if (missing.length) {
+                                  toast({
+                                    title: "Fill all details",
+                                    description: "Please enter your full name, email, and password.",
+                                    variant: "destructive",
+                                    duration: 2000,
+                                  });
+                                  return;
+                                }
 
-                              const form = e.currentTarget;
-                              const data = new FormData(form);
-                              const name = String(data.get("name") ?? "").trim();
+                                const form = e.currentTarget;
+                                const data = new FormData(form);
+                                const name = String(data.get("name") ?? "").trim();
 
-                              setIsAuthed(true);
-                              setDisplayName(name);
-                              toast({ title: "Account created", description: "Demo sign up (no backend).", duration: 2000 });
-                              setOpen(false);
-                            }}
-                            className="grid gap-3"
-                          >
-                            <div className="grid gap-2">
-                              <label htmlFor="signup-name-mobile" className="text-sm text-muted-foreground">
-                                Full name
-                              </label>
-                              <Input
-                                id="signup-name-mobile"
-                                name="name"
-                                autoComplete="name"
-                                placeholder="Your name"
-                                className="bg-background/40"
-                                required
-                              />
-                            </div>
-                            <div className="grid gap-2">
-                              <label htmlFor="signup-email-mobile" className="text-sm text-muted-foreground">
-                                Email
-                              </label>
-                              <Input
-                                id="signup-email-mobile"
-                                name="email"
-                                autoComplete="email"
-                                placeholder="you@college.edu"
-                                className="bg-background/40"
-                                required
-                              />
-                            </div>
-                            <div className="grid gap-2">
-                              <label htmlFor="signup-password-mobile" className="text-sm text-muted-foreground">
-                                Password
-                              </label>
-                              <Input
-                                id="signup-password-mobile"
-                                name="password"
-                                type="password"
-                                autoComplete="new-password"
-                                placeholder="••••••••"
-                                className="bg-background/40"
-                                required
-                              />
-                            </div>
+                                setIsAuthed(true);
+                                setDisplayName(name);
+                                toast({ title: "Account created", description: "Demo sign up (no backend).", duration: 2000 });
+                                setOpen(false);
+                              }}
+                              className="grid gap-3"
+                            >
+                              <div className="grid gap-2">
+                                <label htmlFor="signup-name-mobile" className="text-sm text-muted-foreground">
+                                  Full name
+                                </label>
+                                <Input
+                                  id="signup-name-mobile"
+                                  name="name"
+                                  autoComplete="name"
+                                  placeholder="Your name"
+                                  className="bg-background/40"
+                                  required
+                                />
+                              </div>
+                              <div className="grid gap-2">
+                                <label htmlFor="signup-email-mobile" className="text-sm text-muted-foreground">
+                                  Email
+                                </label>
+                                <Input
+                                  id="signup-email-mobile"
+                                  name="email"
+                                  autoComplete="email"
+                                  placeholder="you@college.edu"
+                                  className="bg-background/40"
+                                  required
+                                />
+                              </div>
+                              <div className="grid gap-2">
+                                <label htmlFor="signup-password-mobile" className="text-sm text-muted-foreground">
+                                  Password
+                                </label>
+                                <Input
+                                  id="signup-password-mobile"
+                                  name="password"
+                                  type="password"
+                                  autoComplete="new-password"
+                                  placeholder="••••••••"
+                                  className="bg-background/40"
+                                  required
+                                />
+                              </div>
 
-                            <Button type="submit" variant="gold" className="mt-2">
-                              Create account
-                            </Button>
-                          </form>
-                        </TabsContent>
-                      </Tabs>
+                              <Button type="submit" variant="gold" className="mt-2">
+                                Create account
+                              </Button>
+                            </form>
+                          </TabsContent>
+                        </Tabs>
+                      )}
 
                       {isAuthed && displayName ? (
                         <p className="mt-4 text-xs text-muted-foreground">Signed in as {displayName}</p>
