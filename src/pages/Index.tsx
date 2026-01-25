@@ -331,7 +331,7 @@ const Index = () => {
                     required
                     rows={5}
                     placeholder="Write your query..."
-                    className="bg-background/40 max-h-40 overflow-y-auto resize-none scroll-smooth [scrollbar-gutter:stable]"
+                    className="bg-background/40 min-h-[112px] max-h-56 overflow-y-auto resize-none scroll-smooth [scrollbar-gutter:stable] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-muted/20 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-primary/35 hover:[&::-webkit-scrollbar-thumb]:bg-primary/55"
                   />
                 </div>
                 <div className="flex flex-wrap items-center justify-between gap-3">
